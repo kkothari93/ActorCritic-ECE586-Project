@@ -23,7 +23,7 @@ class ValueEstimator:
         self.value = tf.squeeze(self.value)
 
     def _build_train_op(self):
-        self.target = tf.placeholder(tf.float32, [100,], name="target")
+        self.target = tf.placeholder(tf.float32, name="target")
         self.loss = tf.reduce_mean(tf.squared_difference(self.value, self.target))
         self.optimizer = tf.train.AdamOptimizer(self.learning_rate)
         self.train_op = self.optimizer.minimize(self.loss)
