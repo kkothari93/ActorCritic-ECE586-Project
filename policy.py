@@ -22,10 +22,11 @@ class PolicyEstimator:
     def _build_model(self):
         self.state = tf.placeholder(tf.float32, [None, 400], name="state")
 
+        # nn estimating mean
         self.mu = tf.contrib.layers.fully_connected(
             inputs=tf.expand_dims(self.state, 0),
             num_outputs=1,
-            activation_fn=None,
+            activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer()
         )
         self.mu = tf.squeeze(self.mu)
@@ -33,17 +34,17 @@ class PolicyEstimator:
         self.sigma = tf.contrib.layers.fully_connected(
             inputs=tf.expand_dims(self.state, 0),
             num_outputs=1,
-            activation_fn=None,
+            activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer()
         )
-        self.sigma = tf.squeeze(self.sigma)
-        self.sigma = tf.nn.softplus(self.sigma) + 1e-5
+        self.sigma = tf.squeeze(self.sigma) + 1e-5
 
         self.norm_dist = tf.contrib.distributions.Normal(self.mu, self.sigma)
         self.action = self.norm_dist.sample(1)
-        self.action = tf.clip_by_value(self.action,
-                                       self.env.action_space.low[0],
-                                       self.env.action_space.high[0])
+        self.action = self.env.action_space.low[0] +\
+            tf.sigmoid(self.action)*(
+            self.env.action_space.high[0] -
+            self.env.action_space.low[0])
 
     def _build_train_op(self):
         self.action_train = tf.placeholder(tf.float32, name="action_train")

@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 class ValueEstimator:
     def __init__(self, env, transformer, learning_rate=0.01, scope="value_estimator"):
         self.env = env
@@ -16,7 +17,7 @@ class ValueEstimator:
         self.value = tf.contrib.layers.fully_connected(
             inputs=tf.expand_dims(self.state, 0),
             num_outputs=1,
-            activation_fn=None,
+            activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer()
         )
         self.value = tf.squeeze(self.value)
