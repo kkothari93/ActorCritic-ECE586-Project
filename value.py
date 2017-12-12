@@ -2,6 +2,7 @@ import tensorflow as tf
 
 
 class ValueEstimator:
+	"""Implements a value function estimator using a single layer nn"""
     def __init__(self, env, transformer, learning_rate=0.01, scope="value_estimator"):
         self.env = env
         self.learning_rate = learning_rate

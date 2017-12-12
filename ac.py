@@ -7,7 +7,7 @@ import numpy as np
 
 
 class ActorCritic(object):
-
+	"""Actor-critic class that implements the agent"""
     def __init__(self, env, transformer,
                  exp_buffer_length=30,
                  episodes=100,
@@ -19,11 +19,11 @@ class ActorCritic(object):
     	tf.reset_default_graph()
         self.env = env
         self.exp_length = exp_buffer_length
-        self.params = {'episodes': episodes,
-                       'gamma': gamma,
+        self.params = {'episodes': episodes, 
+                       'gamma': gamma, # discount factor
                        'display': display,
-                       'lamb': lamb,
-                       'policy_lr': policy_lr,
+                       'lamb': lamb, 
+                       'policy_lr': policy_lr, 
                        'value_lr': value_lr}
         self.experiences = deque([], exp_buffer_length)
         self.policy = PolicyEstimator(
@@ -31,6 +31,7 @@ class ActorCritic(object):
         self.value = ValueEstimator(env, transformer, learning_rate=value_lr)
 
     def _update_target(self, exp, gamma):
+    	"""Takes the sum of rewards of the experience buffer"""
         target = exp[self.exp_length-1][2]
         for i in range(self.exp_length-2, -1, -1):
             target = exp[i][2] + gamma*target

@@ -2,7 +2,9 @@ import tensorflow as tf
 
 
 class PolicyEstimator:
-
+	"""Implements the policy parametrized by a $$mu$$ and $$sigma$$
+	of a normal distribution
+	"""
     def __init__(self,
                  env,
                  transformer,
@@ -26,7 +28,7 @@ class PolicyEstimator:
         self.mu = tf.contrib.layers.fully_connected(
             inputs=tf.expand_dims(self.state, 0),
             num_outputs=1,
-            activation_fn=tf.nn.relu,
+            activation_fn=None,
             weights_initializer=tf.contrib.layers.xavier_initializer()
         )
         self.mu = tf.squeeze(self.mu)
@@ -34,7 +36,7 @@ class PolicyEstimator:
         self.sigma = tf.contrib.layers.fully_connected(
             inputs=tf.expand_dims(self.state, 0),
             num_outputs=1,
-            activation_fn=tf.nn.relu,
+            activation_fn=None,
             weights_initializer=tf.contrib.layers.xavier_initializer()
         )
         self.sigma = tf.squeeze(self.sigma) + 1e-5

@@ -1,3 +1,9 @@
+"""
+Optimizes the hyperparameters using Gaussian process optimization of scikit.
+Idea from Ashioto's submission to OpenAI gym
+"""
+
+
 import numpy as np
 
 import skopt
